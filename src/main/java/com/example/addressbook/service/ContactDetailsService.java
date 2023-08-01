@@ -15,7 +15,13 @@ public class ContactDetailsService implements ContactsDetailsService {
     @Autowired
     private ContactDetailsRepo contactDetailsRepo;
 
+
+
+
     public ContactDetails addContactDetails(ContactDetailsDTO contactDetailsDTO) {
+        if (contactDetailsRepo.existsByEmail(contactDetailsDTO.getEmail())) {
+            throw new ContactCustomException("Email address (Email) already exists in Database: " + contactDetailsDTO.getEmail());
+        }
         ContactDetails contactDetailsData = new ContactDetails(contactDetailsDTO);
         return contactDetailsRepo.save(contactDetailsData);
     }
@@ -25,9 +31,14 @@ public class ContactDetailsService implements ContactsDetailsService {
         if (contactDetailsData == null) {
             throw new IllegalArgumentException("contact details not found with ID: " + id);
         }
-        contactDetailsData.updateContactDetails(contactDetailsDTO);
-        return contactDetailsRepo.save(contactDetailsData);
-    }
+            String newEmail = contactDetailsDTO.getEmail();
+            if (!newEmail.equals(contactDetailsData.getEmail()) && contactDetailsRepo.existsByEmail(newEmail)) {
+                throw new ContactCustomException("Email address (Gmail) already exists in database: " + newEmail);
+            }
+
+            contactDetailsData.updateContactDetails(contactDetailsDTO);
+            return contactDetailsRepo.save(contactDetailsData);
+        }
 
     public void deleteContactDetails(int id) {
         ContactDetails contactDetailsData = getContactDetailsById(id);
