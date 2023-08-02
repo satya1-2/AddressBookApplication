@@ -1,20 +1,21 @@
 package com.example.addressbook.service;
 
 import com.example.addressbook.dto.ContactDetailsDTO;
+import com.example.addressbook.dto.ResponseDTO;
 import com.example.addressbook.model.ContactDetails;
 
 import java.util.List;
 
 public interface ContactsDetailsService {
-    ContactDetails addContactDetails(ContactDetailsDTO contactDetailsDTO );
+    ResponseDTO addContactDetails(ContactDetailsDTO contactDetailsDTO );
 
-    ContactDetails updateContactDetails(int id,  ContactDetailsDTO contactDetailsDTO );
+    ContactDetails updateContactDetails(String token,  ContactDetailsDTO contactDetailsDTO );
 
-    void deleteContactDetails(int id);
+    void deleteContactDetails(String token );
 
     void deleteAllContactDetails();
 
-    ContactDetails getContactDetailsById(int id);
+    ContactDetails getContactDetailsById(String token);
 
     List<ContactDetails> getAllContactDetails();
 

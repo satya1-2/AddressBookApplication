@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/contactDetails")
 @Slf4j
@@ -24,33 +23,28 @@ public class AddressBookController {
     @PostMapping("/add")
     public ResponseEntity<ResponseDTO> addContactDetails(@Valid @RequestBody ContactDetailsDTO contactDetailsDTO) {
         log.debug("Adding contact details: {}", contactDetailsDTO);
-        ContactDetails contactDetails = contactDetailsService.addContactDetails(contactDetailsDTO);
+        //   String token= String.valueOf(contactDetailsService.addContactDetails(contactDetailsDTO));
+        ResponseDTO contactDetails = contactDetailsService.addContactDetails(contactDetailsDTO);
         log.info("Contact details added successfully: {}", contactDetails);
         ResponseDTO responseDTO = new ResponseDTO("Data added Successfully", contactDetails);
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
-
-
     }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseDTO> updateEmployee(@PathVariable int id, @Valid @RequestBody ContactDetailsDTO contactDetailsDTO) {
-        log.debug("Updating conatct details with ID: {}", id);
-        ContactDetails contactDetails = contactDetailsService.updateContactDetails(id, contactDetailsDTO);
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDTO> updateEmployee(@RequestHeader String token, @Valid @RequestBody ContactDetailsDTO contactDetailsDTO) {
+        log.debug("Updating conatct details with ID: {}", token);
+        ContactDetails contactDetails = contactDetailsService.updateContactDetails(token, contactDetailsDTO);
         log.info("Contact Details updated successfully: {}", contactDetails);
         ResponseDTO responseDTO = new ResponseDTO("Data updated Successfully", contactDetails);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseDTO> deleteContactDetails(@PathVariable int id) {
-        log.debug("Deleting contact details with ID: {}", id);
-        contactDetailsService.deleteContactDetails(id);
-        log.info("contact details deleted successfully. ID: {}", id);
+    @DeleteMapping("/delete/token")
+    public ResponseEntity<ResponseDTO> deleteContactDetails(@RequestHeader String token) {
+        log.debug("Deleting contact details with ID: {}", token);
+        contactDetailsService.deleteContactDetails(token);
+        log.info("contact details deleted successfully. ID: {}", token);
         ResponseDTO responseDTO = new ResponseDTO("Data deleted successfully", null);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
-
-
     @DeleteMapping("/delete/all")
     public ResponseEntity<ResponseDTO> deleteAllContactDetails() {
         log.debug("Deleting all contact details");
@@ -59,19 +53,17 @@ public class AddressBookController {
         ResponseDTO responseDTO = new ResponseDTO("All data deleted successfully", null);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
-
-    @GetMapping("/get/{id}")
-    public ResponseEntity<ResponseDTO> getContactDetailsById(@PathVariable int id) {
-        log.debug("Retrieving contact details by ID: {}", id);
-        ContactDetails contactDetails = contactDetailsService.getContactDetailsById(id);
+    @GetMapping("/getBytoken")
+    public ResponseEntity<ResponseDTO> getContactDetailsById(@RequestHeader String token) {
+        ContactDetails contactDetails = contactDetailsService.getContactDetailsById(token);
         ResponseDTO responseDTO;
         HttpStatus status;
         if (contactDetails != null) {
-            log.info("Contact Details found. ID: {}", id);
+            log.info("Contact Details found. ID: {}", token);
             responseDTO = new ResponseDTO("contact details found", contactDetails);
             status = HttpStatus.OK;
         } else {
-            log.warn("Contact details not found. ID: {}", id);
+            log.warn("Contact details not found. ID: {}", token);
             responseDTO = new ResponseDTO("Contact details not found", null);
             status = HttpStatus.NOT_FOUND;
         }

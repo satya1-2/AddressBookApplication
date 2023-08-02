@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 @ControllerAdvice
 public class ContactExceptionHandler {
-
-
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDTO> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception){
         List<ObjectError> errorList=exception.getBindingResult().getAllErrors();

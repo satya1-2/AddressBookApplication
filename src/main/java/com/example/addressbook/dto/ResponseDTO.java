@@ -1,6 +1,5 @@
 package com.example.addressbook.dto;
 
-import com.example.addressbook.model.ContactDetails;
 import lombok.Data;
 
 @Data
