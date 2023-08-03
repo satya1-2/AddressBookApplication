@@ -24,10 +24,10 @@ public class AddressBookController {
     public ResponseEntity<ResponseDTO> addContactDetails(@Valid @RequestBody ContactDetailsDTO contactDetailsDTO) {
         log.debug("Adding contact details: {}", contactDetailsDTO);
         //   String token= String.valueOf(contactDetailsService.addContactDetails(contactDetailsDTO));
-        ResponseDTO contactDetails = contactDetailsService.addContactDetails(contactDetailsDTO);
+       ResponseDTO contactDetails = contactDetailsService.addContactDetails(contactDetailsDTO);
         log.info("Contact details added successfully: {}", contactDetails);
-        ResponseDTO responseDTO = new ResponseDTO("Data added Successfully", contactDetails);
-        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+      //  ResponseDTO responseDTO = new ResponseDTO("Data added Successfully", contactDetails);
+        return new ResponseEntity<>(contactDetailsService.addContactDetails(contactDetailsDTO), HttpStatus.CREATED);
     }
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO> updateEmployee(@RequestHeader String token, @Valid @RequestBody ContactDetailsDTO contactDetailsDTO) {

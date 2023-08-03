@@ -5,8 +5,10 @@ import com.example.addressbook.dto.ResponseDTO;
 import com.example.addressbook.exception.ContactCustomException;
 import com.example.addressbook.model.ContactDetails;
 import com.example.addressbook.repo.ContactDetailsRepo;
+import com.example.addressbook.token.EmailService;
 import com.example.addressbook.token.JWTToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,13 +19,15 @@ public class ContactDetailsService implements ContactsDetailsService {
     private ContactDetailsRepo contactDetailsRepo;
     @Autowired
     private JWTToken jwtToken;
-
+    @Autowired
+    private EmailService contactDetailsServices;
 
     public ResponseDTO addContactDetails(ContactDetailsDTO contactDetailsDTO) {
         ContactDetails contactDetailsData = new ContactDetails(contactDetailsDTO);
         contactDetailsRepo.save(contactDetailsData);
         String token = jwtToken.createToken(contactDetailsData.getId());
-
+        contactDetailsServices.sendEmail(contactDetailsDTO.getEmail(), "data added successfully",
+                "hai " + contactDetailsDTO.getName() + "\n you have been successfully added data:\n\n" + contactDetailsData);
         return new ResponseDTO(token, contactDetailsData);
 
     }

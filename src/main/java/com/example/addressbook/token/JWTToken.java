@@ -2,14 +2,13 @@ package com.example.addressbook.token;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 
 public class JWTToken {
-
     private static final String SECRET = "Satya";
-
     public static String createToken(int id) {
         String token;
         token = JWT.create()
